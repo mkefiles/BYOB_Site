@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BYOB</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+
+    <div id="quiz-modal" class="quiz hide">
+        <span id="close-button" class="close">&#x2718;</span>
+        <h1>WHAT WE SUGGEST</h1>
+
+        <div id="intro">
+            <div class="modal-data">
+                <h2 class="data--width">QUIZ</h2>
+                <p class="small data--width">
+                    Please answer the following questions to determine what the best option is for YOUR situation.
+                    <br>
+                    <br>
+                    Oh and no worries... we will not be asking for or collecting any name or contact information at the end of this.
+                </p>
+                <button id="startBtn" class="btn btn--orange">START</button>
+            </div>
+        </div>
+
+        <div id="questions" class="hide">
+            <div class="modal-data">
+                <h2 class="data--width">QUESTION</h2>
+                <p id="counter" class="data--width"></p>
+                <p id="question" class="data--width">
+                    <!-- Dynamically Populated -->
+                </p>
+                <div id="answers" class="data--width">
+                    <!-- Dynamically Populated -->
+                </div>
+            </div>
+        </div>
+
+        <div id="results" class="results hide">
+            <div class="modal-data">
+                <h2 class="data--width">RESULTS</h2>
+                <div id="output" class="data--width">
+                    <!-- Dynamically Populated -->
+                </div>
+                <button id="resetBtn" class="btn btn--orange">RETAKE</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <byob-header>
+            <nav>
+                <img src="assets/sl_logo--new.png" alt="SecureLegacy Icon" class="logo">
+            </nav>
+        </byob-header>
+
+        <byob-hero>
+            <header>
+                <h1 class="white">BRING YOUR OWN BENEFITS</h1>
+                <h3 class="white">Do any job you want AND get access to benefits.</h3>
+                <a href="#GetStarted" class="btn btn--orange">Get Benefits Now</a>
+                <a id="optionsBtn" class="btn btn--white">Take Quiz First</a>
+            </header>
+        </byob-hero>
+
+        <byob-options>
+            <main>
+                <h2>AVAILABLE OPTIONS</h2>
+                <h3>Here's a list of benefits you can choose from.</h3>
+                <div class="options">
+                    <div class="card">
+                        <img src="assets/icon--health_insurance.svg" alt="Health Plus Logo" class="option-icon">
+                        <h3>HEALTH INSURANCE</h3>
+                        <p>
+                            Group-rate health insurance on one of the largest networks in the country. You even get flexibility with out-of-network doctors. Best part? You can say goodbye to waiting on a referral.
+                        </p>
+                    </div>
+                    <div class="card">
+                        <img src="assets/icon--cost_share.svg" alt="Cost Share Logo" class="option-icon">
+                        <h3>MEDICAL COST SHARING</h3>
+                        <p>
+                            Open to other options besides health insurance? Medical Cost Sharing may be your thing. With this you aren't bound to a network. Not to mention it's usually cheaper than health insurance. Sounds like freedom AND savings!
+                        </p>
+                    </div>
+                    <div class="card">
+                        <img src="assets/icon--401k.svg" alt="401(k) Logo" class="option-icon">
+                        <h3>401(k)</h3>
+                        <p>
+                            Retirement. We'll all be there one day so you may want to get a jumpstart on this. A 401(k) gives you a straightforward way to plan for your financial future. Having a professionally managed retirement plan = smart.
+                        </p>
+                    </div>
+                    <div class="card">
+                        <img src="assets/icon--supplemental_benefits.svg" alt="Supplemental Benefits Logo" class="option-icon">
+                        <h3>SUPPLEMENTAL BENEFITS</h3>
+                        <p>
+                            Doctors and hospitals getting paid is good and all, but you know what's great? When YOU get paid if something happens. Supplemental Benefits help you NOT break the bank over things like Accidents, Hospital Stays and Critical Illnesses. You also have options for Disability and Life Insurance plans. The world is your [affordable] oyster.
+                        </p>
+                    </div>
+                </div>
+            </main>
+        </byob-options>
+
+        <byob-unsure>
+            <section>
+                <h2>UNSURE WHAT TO CHOOSE</h2>
+                <h3>Take a brief quiz to get your customized suggestion.</h3>
+                <a id="optionsBtn" class="btn btn--white">Get YOUR Options</a>
+            </section>
+        </byob-unsure>
+
+        <byob-faq>
+            <section>
+                <h2>FREQUENTLY ASKED QUESTIONS</h2>
+                <h3>HEALTH INSURANCE</h3>
+                <div class="faq">
+                    <h4 class="question">
+                        How does it work?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        So this is where it gets really interesting. This option provides you "group-rates" and it requires that you become an <em>employee </em> of 1099Workers. Now, before clicking off, let me reassure you that you are not required to do any "work". There are no employee-expectations over you whatsoever. It is simply a way in which you can get "employee" benefits at group-rates. The only change-up is that you will receive a $0 W-2 at the end of each year oh... and you'll gain access to benefits.
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        How much will it cost me?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        The price can fluctuate depending on the plan you choose as well as the deductible not to mention if you are adding your spouse and/or family onto the plan. That said, when you start the enrollment process (<a href="https://seebenefits.1099workers.com/?referral=Mi-HZSFPJPCE8C8" target="_blank">click here</a>), you are able to get the price <b>before</b> submitting anything.
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        Is a MEC plan considered MCC eligible? [Important for Tax-Penalty States]
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        Generally speaking, a Minimum Essential Coverage plan is not considered Minimum Creditable Coverage eligible. MCC plans have stricter standards than MEC plans meaning that they often have higher coverage levels and benefit requirements in certain states like Massachusetts.
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        What is the difference between an HMO and a PPO?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        The main differences between HMO and PPO plans are cost, flexibility and provider-selection. A PPO plan is typically more expensive than HMO plans, <b>however</b> PPO plans offer more flexibility (i.e., you can see providers in and out of the network without a referral) whereas HMO plans usually limit out-of-network coverage to emergencies. PPOs also do not typically require selecting a Primary Care Physician (PCP), which allows you to go to the doctor/specialist directly.
+                        <br>
+                        <br>
+                        If you travel frequently (or have a chronic condition), then a PPO may be a better fit. If you most get care in your home city or from a family physician, then an HMO may be a better fit. All plans we offer are Blue Cross Blue Shield PPO plans, meaning that you get a lot of flexibility on one of the nations strongest healthcare networks.
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        When does Open Enrollment start?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        Open enrollment typically occurs in the 4th quarter of the year. During this time, you'll receive notifications regarding the open enrollment window allowing you to make new benefit selections for the upcoming year. Your initial enrollment, however, can start whenever you decide to join.
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        If I sign up today, when will my medical benefits take effect?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        Your medical benefits start on the first of the month following your payment. For example, if you sign up on November 1 and your first account draft is on December 1, your benefits will be effective January 1.
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        I signed up for benefits, when will I make my first payment?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        Your first charge occurs on the 1st and 15th of the month following your completed enrollment.
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        Does my family have access to any services?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        You will have the option to add your family members to most of the available benefits. Our telehealth solution includes your family at no additional cost.
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        What network are the health benefits on?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        All of our major medical health plans are on the Blue Choice PPO Network, as part of Blue Cross.
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        Can I cancel my benefits at any time?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        Yes, you can cancel your association with 1099 Workers at any time. You must send a written notice to cancellations@1099workers.com. Your benefits will remain active through the remainder of the month.
+                    </p>
+                </div>
+                <hr>
+                <h3>MED. COST SHARING</h3>
+                <div class="faq">
+                    <h4 class="question">
+                        What is Medical Cost Sharing?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        Medical Cost Sharing is, basically, crowd-funding for medical costs. Members make monthly payments into a pool of money that is used to cover everyone's approved healthcare costs. It is important to know that Medical Cost Sharing is <b>not</b> Health Insurance.
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        How much will it cost me?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        The price depends on a few different variables. Please <a href="https://sedera.com/memberships/individuals-families" target="_blank">click here</a> to learn more and, on that page, you can click the Download Pricing Sheet link.
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        Does membership in a Medical Cost Sharing community satisfy federal or state-level individual mandates?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        Membership in the Medical Cost Sharing Community is <b>not</b> minimum essential coverage (MEC) and does not make an individual compliant with the federal ACA mandate or any state-level individual mandate that requires individuals to purchase health insurance. Any and all applicable penalties still apply for individuals who are members who do not otherwise meet federal and/or state coverage mandates.
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        Can I choose my own doctors and hospitals?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        Absolutely! Freedom of choice is fundamental to M.C.S. values. There are no network restrictions which means members are free to select their providers based on personal preference, value, cost, and convenience and there are no “out-of-network” penalties. You, ultimately, become a "cash-pay" patient with the medical professionals you work with... worldwide. There are Member Advisors that can help members locate cash-pay friendly medical professionals.
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        What happens if I have multiple "Needs" cases within a 12-month period?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        Members and Households that experience multiple "Needs" cases within their 12-month Membership Year are required to pay the first three I.U.A.'s at the selected amount. If there is a fourth "Needs" case during the same Membership Year, no I.U.A. would apply. The four "Needs" case, and any subsequent "Needs" case(s), would be eligible for sharing with no I.U.A. subject to any stated restrictions or limitations in the guidelines. Please remember that to qualify as a "Needs" case, the medical expense <b>must</b> first exceed the Member's I.U.A..
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        What is an I.U.A.?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        An Individual Unshareable Amount (IUA) is the amount a member of a health care sharing plan is responsible for paying <b>per</b> injury or illness <b>without</b> help from the community.
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        Can my Membership be dropped if I have very high medical needs?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        No. Members cannot be dropped from the membership due to their medical Needs. Neither your membership nor your monthly share is affected by the amount of medical expenses you or any of your family members may have.
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        How does the community share expenses related to pre-existing medical conditions?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        No prospective member is turned away for having Pre-Existing Medical Conditions, and there is a path to sharing medical expenses associated with a Pre-Existing Medical Condition. The community does have a look-back period of 36 months that applies to all Pre-Existing Medical Conditions for the applicant(s). A Pre-Existing Medical Condition is any medical condition that existed prior to membership (diagnosed, suspected, or producing observable signs or symptoms). Needs that result from Pre-Existing Medical Conditions are subject to sharing limitations unless 36 months immediately prior to the membership effective date has passed without any signs or symptoms of the condition, without any treatment needed, without any medication prescribed or taken, and without any suspicion by the patient or doctors that the condition is resurfacing. This applies whether or not the cause of the symptoms is unknown or misdiagnosed. Pre-Existing Medical Conditions will become eligible for sharing based on the Member's tenure with the community, as indicated by the applicable <a href="https://sedera.com/membership-guidelines" target="_blank">Membership Guidelines</a>.
+                    </p>
+                </div>
+                <hr>
+                <h3>SUPPLEMENTAL BENEFITS</h3>
+                <div class="faq">
+                    <h4 class="question">
+                        What are supplemental benefits?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        Put it simply, they are insurance policies that help to cover expenses that are not covered by major medical insurance. 
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        Is it required that I have health insurance in order to get supplemental benefits?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        No. Some carriers do have strict requirements around their Hospital Indemnity plan and having <i>minimum essential coverage</i>, however we have a carrier that does <b>not</b> have this mandate. All other plans (i.e., Accident, Critical Illness, Disability, etc.) do not have any requirements.
+                        <br>
+                        <br>
+                        If anything, having multiple supplemental benefits are a great way to <em>self-insure</em> at a cost that is much cheaper than obtaining health insurance. Not to mention that you could, as an example, obtain a Hospital Indemnity plan with Cash Value / Return of Premium and, at the end of the term, get all of your premiums back tax-free (minus any policy pay-out(s)). Talk about a cool <em>savings</em> account that provides you some reassurance in the event that something goes wrong.
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        How much do supplemental benefits cost?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        It varies, however most of them are around $7 - $10 per week. Disability Insurance and Life Insurance tend to fall under the Supplement Benefit wing and those premiums depend heavily on your income and the amount desired (respectively).
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        What is Return of Premium / Cash Value?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        Put simply... you get your money back. Having insurance can be good, but knowing you can get your premiums back if you have not used the policy is great. State-pending, most of our plans (i.e., Accident, Hospital Indemnity, Disability, etc.) offer some type of Return of Premium or Cash Value. The only caveat is that a policy with a Return of Premium Rider will tend to cost more on a monthly basis.
+                    </p>
+                </div>
+                <hr>
+                <div class="faq">
+                    <h4 class="question">
+                        Why do I need to schedule a meeting in order to get these?
+                    </h4>
+                    <div class="toggler">
+                        &#x21f5;
+                    </div>
+                    <p class="answer hide">
+                        Unlike the Health Insurance and Medical Cost Sharing options, which can be enrolled in independently, supplement benefits have muliple moving parts. These can be tweaked and customized to fit your need and it is rare that a person will ever enroll in all of them.
+                        <br>
+                        <br>
+                        When we sit down and discuss options, we tend to discourage employees from exceeding 1.5 - 2 hours of their weekly pay. Don't worry... we are <b>not</b> high-pressure sales reps that will over-insure you just to make a buck. We stand behind the idea that insurance is useless if you're just going to drop it let alone the idea that it would have you burning your money. Oh and... quiet part out loud, insurance agents get charge-backs if a policy cancels within the first year.
+                    </p>
+                </div>
+                <hr>
+            </section>
+        </byob-faq>
+
+        <byob-get-started>
+            <section>
+                <h2 id="GetStarted">LET'S GET STARTED</h2>
+                <h3 id="dynamicMessage">Want to skip the quiz and just get the process started..?</h3>
+                <h3>OPTION ONE</h3>
+                <h4>Health Insurance with a 401(k)</h4>
+                <p>
+                    Click "Enroll Me". Complete your profile. Select your benefits. Submit your benefits request. Then complete your I-9 and W-4 forms.
+                    <br>
+                    <br>
+                    Once completed, you'll receive a Welcome email, which includes your enrollment guide.
+                    <br>
+                    <br>
+                    You also get access to supplement benefits and virtual primary care.
+                </p>
+                <a href="https://seebenefits.1099workers.com/?referral=Mi-HZSFPJPCE8C8" target="_blank" class="btn btn--orange">Enroll Me</a>
+                <a href="https://my.providerfinderonline.com/?ci=tx-bluechoiceppo&network_id=300000000&geo_location=29.760427,-95.369804&locale=en" target="_blank" class="btn btn--white">Check Network</a>
+                <h3>OPTION TWO</h3>
+                <h4>Medical Cost Sharing</h4>
+                <p>
+                    May be a great option if you're simply looking for a way to cover healthcare expenses if/when they come up.
+                    <br>
+                    <br>
+                    Note that this is not available in all states and does not count as Minimum Essential Coverage (MEC).
+                    <br>
+                    <br>
+                    Feel free to Schedule a Meeting with us if you are interested, yet want to learn more first.
+                    <br>
+                    <br>
+                    Additional Resources: <a href="https://sedera.com/membership-guidelines" target="_blank">Membership Guidelines</a> and <a href="https://sedera.com/community/faqs" target="_blank">Frequently Asked Questions</a>.
+                </p>
+                <a href="http://www.1enrollment.com/817410" target="_blank" class="btn btn--orange">Enroll Me</a>
+                <a href="https://calendly.com/mike_files/meet_with_mike" target="_blank" class="btn btn--white">Schedule a Meeting</a>
+                <h3>ADD-ONS</h3>
+                <h4>Supplemental Benefits</h4>
+                <p>
+                    Maybe you already have Health Insurance. That's not a problem... you can still get your own Supplemental Benefits such as Accident, Critical Illness, Disability Insurance, etc.
+                    <br>
+                    <br>
+                    As a side-note, a standalone Hospital Indemnity plan is highly recommended if you would like to offset the cost of deductibles and co-pays. The money from these are all paid to you <b>not</b> the hospital or doctor(s).
+                </p>
+                <a href="https://calendly.com/mike_files/meet_with_mike" target="_blank" class="btn btn--white">Schedule a Meeting</a>
+            </section>
+        </byob-get-started>
+
+        <byob-pre-footer>
+            <section>
+                <img src="assets/sl_logo--new.png" alt="SecureLegacy Icon" class="logo">
+                <p>
+                    <em>#BYOB - Bring Your Own Benefits</em>
+                </p>
+            </section>
+        </byob-pre-footer>
+
+        <byob-footer>
+            <footer>
+                <a href="tel:2075009076">Call Us</a>
+                <a href="mailto:info@securelegacyins.com">Email Us</a>
+            </footer>
+        </byob-footer>
+    </div>
+
+    <script src="scripts/script.js"></script>
+
+    <!-- Calendly badge widget begin -->
+    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+    <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+    <script type="text/javascript">window.onload = function() { Calendly.initBadgeWidget({ url: 'https://calendly.com/mike_files/meet_with_mike', text: 'Schedule a Meeting', color: '#004EBA', textColor: '#ffffff' }); }</script>
+    <!-- Calendly badge widget end -->
+</body>
+</html>

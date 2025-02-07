@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+</head>
+<style>
+    .container{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .hide{
+        display: none;
+    }
+    #answers{
+        display: flex;
+        flex-direction: column;
+    }
+    .btn{
+        background-color: green;
+        color: white;
+        border-radius: 25px;
+        padding: 10px 10px 10px 10px;
+    }
+    .disabled{
+        background-color: lightgray;
+        color: white;
+    }
+</style>
+<body>
+    <div class="container">
+        <h1>Quiz</h1>
+
+        <div id="intro">
+            <h2>Intro</h2>
+            <p>Start the quiz?</p>
+            <button id="startBtn">Start</button>
+        </div>
+
+
+        
+        <div id="questions" class="hide">
+            <h2>Questions</h2>
+            <p id="counter"></p>
+            <p id="question">
+                <!-- Dynamically Populated -->
+            </p>
+            <div id="answers" class="answers">
+                <!-- Dynamically Populated -->
+            </div>
+        </div>
+
+        <div id="results" class="hide">
+            <h2>Results</h2>
+            <div id="output">
+                <!-- Dynamically Populated -->
+            </div>
+            <button id="resetBtn">Retake</button>
+        </div>
+    </div>
+    <script>
+        /*
+        * SECTION: DEFINE VARIABLES
+        */
+        let questionsAndAnswers = [
+            {
+                question: "Are you between the age of 18 and 65?",
+                answers: [
+                    {text: "Yes"},
+                    {text: "No"}
+                ]
+            },
+            {
+                question: "Do you receive (and will you continue to receive) any subsidies on your state health insurance marketplace?",
+                answers: [
+                    {text: "Yes"},
+                    {text: "No"}
+                ]
+            },
+            {
+                question: "Is access to a 401(k) plan important to you?",
+                answers: [
+                    {text: "Yes"},
+                    {text: "No"}
+                ]
+            },
+            {
+                question: "Does the idea of using an alternative to health insurance sound interesting to you?",
+                answers: [
+                    {text: "Yes"},
+                    {text: "No"},
+                    {text: "Maybe"}
+                ]
+            },
+            {
+                question: "Have you met with a doctor or other medical professional to discuss a medical situation within the last 36 months?",
+                answers: [
+                    {text: "Yes"},
+                    {text: "No"}
+                ]
+            },
+            {
+                question: "Are you taking medications for any condition or symptom?",
+                answers: [
+                    {text: "Yes"},
+                    {text: "No"}
+                ]
+            },
+            {
+                question: "Are you currently thinking about going to see a doctor or other medical professional because something is bothering you?",
+                answers: [
+                    {text: "Yes"},
+                    {text: "No"}
+                ]
+            },
+            {
+                question: "Are you a tobacco user?",
+                answers: [
+                    {text: "Yes"},
+                    {text: "No"}
+                ]
+            },
+            {
+                question: "What state do you live in?",
+                answers: [],
+                options: [
+                    'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
+                    'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan',
+                    'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina',
+                    'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah',
+                    'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+                ]
+            }
+        ];
+
+        let startBtn = document.getElementById("startBtn");
+        let resetBtn = document.getElementById("resetBtn");
+        
+        let introDiv = document.getElementById("intro");
+        let questionsDiv = document.getElementById("questions");
+        let answerDiv = document.getElementById("answers");
+        let resultsDiv = document.getElementById("results");
+        let outputDiv = document.getElementById("output");
+        
+        let counterField = document.getElementById("counter");
+        let questionField = document.getElementById("question");
+        
+        let questionCounter = 0;
+
+        // Create an array with a pre-determined number of empty strings
+        let receivedResponses = Array(questionsAndAnswers.length).fill("");
+
+        let sederaDisqualifiedStates = ['Washington', 'Vermont', 'Pennsylvania', 'New Mexico', 'California'];
+        let insuranceMandateStates = ['Massachusetts', 'New Jersey', 'Rhode Island', 'Vermont', 'California'];
+
+        let possibleWarnings = [
+            {
+                type: "Cost Effective",
+                warning: "Due to you receiving subsidies, it may not be cost-effective to proceed with the suggestion(s) provided. Please take that into consideration before proceeding with any suggestion(s) provided."
+            },
+            {
+                type: "Pre Existing",
+                warning: "Due to you answering question(s) suggesting that you may have pre-existing conditions, Medical Cost Sharing may not be your best choice. No prospective member for Medical Cost Sharing is turned away, however you may have need-sharing limitations so please take that into consideration before choosing Medical Cost Sharing."
+            },
+            {
+                type: "Tobacco",
+                warning: "Due to you answering 'Yes' to being a tobacco, user, Medical Cost Sharing may not be your best choice.  No prospective member for Medical Cost Sharing is turned away, however you may have need-sharing limitations as well as higher monthly contribution requirements so please take that into consideration before choosing Medical Cost Sharing."
+            },
+            {
+                type: "Mandate",
+                warning: "As of March of 2024, the following states have an individual insurance mandate: California, Massachusetts, New Jersey, Rhode Island and Vermont. All of those states, except for Vermont, have a tax penalty for not having 'minimum essential coverage' and Medical Cost Sharing does not satisfy this mandate. Please take that into consideration before proceeding with Medical Cost Sharing."
+            },
+            {
+                type: "Ineligible: State",
+                warning: "The following states are ineligible for Medical Cost Sharing with our provider: Washington, Vermont, Pennsylvania, New Mexico and California. Please take that into consideration before proceeding with Medical Cost Sharing."
+            },
+            {
+                type: "Ineligible: Age",
+                warning: "Thank you for taking the quiz. Due to your age, you are ineligible for what we offer."
+            }
+        ]
+
+        let userWarnings = [];
+
+        /*
+        * SECTION: DEFINE FUNCTIONS
+        */
+        
+        function startQuiz() {
+            // appendQuestionAndAnswers(questionCounter);
+            
+            // Hide the Intro div
+            introDiv.classList.add("hide");
+
+            // Show the Questions div
+            questionsDiv.classList.remove("hide");
+
+            // Display the first question
+            loadQuestionAndAnswers(questionCounter);
+        }
+
+        function loadQuestionAndAnswers(questionNumber) {
+            // Display question count
+            counterField.innerText = `Question ${questionNumber + 1} of ${questionsAndAnswers.length}`;
+
+            // Remove all prior answer-options
+            while(answerDiv.firstChild) {
+                answerDiv.removeChild(answerDiv.firstChild);
+            }
+
+            // Replace any text in field with current question
+            questionField.innerText = questionsAndAnswers[questionNumber]["question"];
+
+            // Check if question is Yes/No or Dropdown
+            // In this scenario, the 'dropdown' question signifies the end of the questioning...
+            // ... hence why there is a Submit button added at the end of that chain of events
+            if(questionsAndAnswers[questionNumber]["answers"].length == 0){
+                // Create the drop-down element (only one element needs to be created so no loop)
+                const newDropdown = document.createElement("select");
+
+                // Create 'default' option
+                const dropdownDefault = document.createElement("option");
+
+                // Set 'default' option value-attribute
+                dropdownDefault.setAttribute("value", "--Select--");
+
+                // Assign text-value to option
+                const defaultValue = document.createTextNode("--Select--");
+                dropdownDefault.appendChild(defaultValue);
+
+                // Append 'default' option-tag to parent select-tag
+                newDropdown.appendChild(dropdownDefault);
+
+                // Add dropdown to DOM
+                answerDiv.appendChild(newDropdown);
+
+                // Display drop-down question
+                for (let i = 0; i < questionsAndAnswers[questionNumber]["options"].length; i++) {
+                    // Create drop-down option(s)
+                    const dropdownOption = document.createElement("option");
+
+                    // Set option value-attribute
+                    dropdownOption.setAttribute("value", questionsAndAnswers[questionNumber]["options"][i]);
+
+                    // Assign text-value to option
+                    const optionValue = document.createTextNode(questionsAndAnswers[questionNumber]["options"][i]);
+                    dropdownOption.appendChild(optionValue);
+
+                    // Append option-specific option-tag to parent select-tag
+                    newDropdown.appendChild(dropdownOption);
+                }
+
+                // Add event-listener to drop-down
+                newDropdown.addEventListener("change", function() {
+                    console.log("A change occurred");
+
+                    // Prevent 'default' value from being selected (it disappears once the user selects the dropdown)
+                    dropdownDefault.setAttribute("hidden", "hidden");
+
+                    // Enable the submit button
+                    submitBtn.removeAttribute("disabled");
+                    submitBtn.classList.remove("disabled");
+                });
+
+                // Create the submit button element
+                const submitBtn = document.createElement("button");
+
+                // Assign text-value to button
+                const submitValue = document.createTextNode("Get Recommendations");
+                submitBtn.appendChild(submitValue);
+
+                // Set styling class to element
+                submitBtn.classList.add("btn");
+                submitBtn.classList.add("disabled");
+
+                // Disable the button
+                submitBtn.setAttribute("disabled", "disabled");
+
+                // Add event-listener to the button
+                // Checking if the state result is valid is not required because...
+                // ... the drop-down does not allow the user to re-select the dud value and...
+                // ... a 'change' event does not fire until the value is actually changed
+                submitBtn.addEventListener("click", function() {
+                    // Update receivedResponse array with answer
+                    receivedResponses[questionNumber] = newDropdown.value;
+
+                    // Submit the form
+                    submitResponses();
+                });
+
+                // Add button to DOM
+                answerDiv.appendChild(submitBtn);
+            } else {
+                // Loop through Question object answers
+                for (let i = 0; i < questionsAndAnswers[questionNumber]["answers"].length; i++) {
+                    // Create the answer button element(s)
+                    const newButton = document.createElement("button");
+
+                    // Assign text-value to button
+                    const buttonValue = document.createTextNode(questionsAndAnswers[questionNumber]["answers"][i]["text"]);
+                    newButton.appendChild(buttonValue);
+
+                    // Set styling class to element
+                    newButton.classList.add("btn");
+
+                    // Add event-listener to the button(s)
+                    newButton.addEventListener("click", function() {
+
+                        // Check if there are no additional questions
+                        if (questionNumber == questionsAndAnswers.length - 1) {
+                            // Update receivedResponse array with answer
+                            receivedResponses[questionNumber] = questionsAndAnswers[questionNumber]["answers"][i]["text"];
+                            submitResponses();
+                        } else {
+                            // Update receivedResponse array with answer
+                            receivedResponses[questionNumber] = questionsAndAnswers[questionNumber]["answers"][i]["text"];
+                            nextQuestion();
+                        }
+                    });
+
+                    // Add button to DOM
+                    answerDiv.appendChild(newButton);
+                }
+            }
+        }
+
+        function nextQuestion() {
+            // Increment couner
+            questionCounter += 1;
+
+            // Display next question and answer(s)
+            loadQuestionAndAnswers(questionCounter);
+        }
+
+        function submitResponses() {
+            console.log(`Received responses: ${receivedResponses}`);
+
+            // Hide the questions div
+            questionsDiv.classList.add("hide");
+
+            // Reveal the results div
+            resultsDiv.classList.remove("hide");
+
+            // Begin evaluation process
+            evaluateResponses();
+        }
+
+        function evaluateResponses() {
+
+            /* Q1: Are you between the age of 18 and 65? */
+            if (receivedResponses[0] == "No") {
+                // Append applicable warnings to output
+                userWarnings.push(possibleWarnings[5]["warning"]);
+
+                // Output just the warning (i.e., all products ineligible)
+                outputWarnings();
+            } else {
+
+                /* Q2: Do you receive (and will you continue to receive) any subsidies on your state health insurance marketplace? */
+                if (receivedResponses[1] == "Yes") {
+                    // Append applicable warnings to output
+                    userWarnings.push(possibleWarnings[0]["warning"]);
+                    console.log("Warning on subsidies appended...");
+                }
+
+                /* Q3: Is access to a 401(k) plan important to you? */
+                if (receivedResponses[2] == "Yes") {
+                    // Output 1099Workers and the Add-Ons
+                    output1099Workers();
+                    outputAddons();
+                    outputWarnings();
+                } else {
+
+                    /* Q4: Does the idea of using an alternative to health insurance sound interesting to you? */
+                    if (receivedResponses[3] == "No") {
+                        // Output 1099Workers and the Add-Ons
+                        output1099Workers();
+                        outputAddons();
+                        outputWarnings();
+                    } else {
+
+                        /* Q5: Have you met with a doctor or other medical professional to discuss a medical situation within the last 36 months? */
+
+                        /* Q6: Are you taking medications for any condition or symptom? */
+
+                        /* Q7: Are you currently thinking about going to see a doctor or other medical professional because something is bothering you? */
+                        if (receivedResponses[4] == "Yes" || receivedResponses[5] == "Yes" || receivedResponses[6] == "Yes") {
+                            // Append applicable warnings to output
+                            userWarnings.push(possibleWarnings[1]["warning"]);
+                        }
+
+                        /* Q8: Are you a tobacco user? */
+                        if (receivedResponses[7] == "Yes") {
+                            // Append applicable warnings to output
+                            userWarnings.push(possibleWarnings[2]["warning"]);
+                        }
+                        
+                        /* Q9: What state do you live in? */
+                        if (sederaDisqualifiedStates.includes(receivedResponses[8])) {
+                            // Append applicable warnings to output
+                            userWarnings.push(possibleWarnings[4]["warning"]);
+
+                            // Output 1099Workers and the Add-Ons
+                            output1099Workers();
+                            outputAddons();
+                            outputWarnings();
+                        } else {
+                            
+                            if (insuranceMandateStates.includes(receivedResponses[8])) {
+                                // Append applicable warnings to output
+                                userWarnings.push(possibleWarnings[3]["warning"]);
+
+                                // Output 1099Workers, Medical Cost Sharing and the Add-Ons
+                                output1099Workers();
+                                outputSedera();
+                                outputAddons();
+                                outputWarnings();
+                            } else {
+                                // Output 1099Workers, Medical Cost Sharing and the Add-Ons
+                                output1099Workers();
+                                outputSedera();
+                                outputAddons();
+                                outputWarnings();
+                            }
+                        }
+                    }
+                }
+            }
+            // TODO: Remove this for PROD
+            console.log(userWarnings);
+        }
+
+        function outputSedera() {
+            // Create paragraph element
+            const sederaParagraph = document.createElement("p");
+
+            // Assign text-value to paragraph
+            const paragraphContent = document.createTextNode("Medical Cost Sharing (Option Two) is a valid option given the information provided. Please see additional suggested Add-Ons below.");
+            sederaParagraph.appendChild(paragraphContent);
+
+            // TODO: POSSIBLY - Apply styling/class to paragraph tag?
+
+            // Add paragraph to DOM
+            outputDiv.appendChild(sederaParagraph);
+        }
+        function output1099Workers() {
+            // Create paragraph element
+            const insuranceParagraph = document.createElement("p");
+
+            // Assign text-value to paragraph
+            const paragraphContent = document.createTextNode("Health Insurance (Option One) is a valid option given the information provided. This also gives you access to a 401(k) that you can opt into.");
+            insuranceParagraph.appendChild(paragraphContent);
+
+            // TODO: POSSIBLY - Apply styling/class to paragraph tag?
+
+            // Add paragraph to DOM
+            outputDiv.appendChild(insuranceParagraph);
+        }
+        function outputAddons() {
+            // Create paragraph element
+            const addOnParagraph = document.createElement("p");
+
+            // Assign text-value to paragraph
+            const paragraphContent = document.createTextNode("Whether you choose to go with Option One or Option Two, a great add-on is a Hospital Indemnity policy that will pay out to you in the event that you go to a hospital. These are great to offset the cost of co-pays and deductibles.");
+
+            addOnParagraph.appendChild(paragraphContent);
+            addOnParagraph.appendChild(document.createElement("br"));
+            addOnParagraph.appendChild(document.createElement("br"));
+            addOnParagraph.appendChild(document.createTextNode("Note that we also have other products including Disability Insurance."));
+
+            // TODO: POSSIBLY - Apply styling/class to paragraph tag?
+
+            // Add paragraph to DOM
+            outputDiv.appendChild(addOnParagraph);
+        }
+        function outputWarnings() {
+            if (userWarnings.length > 0) {
+                // Create the warning header
+                const warningHeader = document.createElement("h3");
+
+                // Assign text-value to header
+                const warningText = document.createTextNode("Warnings");
+                warningHeader.appendChild(warningText);
+
+                // Add header to DOM
+                outputDiv.appendChild(warningHeader);
+
+                for (let i = 0; i < userWarnings.length; i++) {
+                    // Create warning paragraph
+                    const warningParagraph = document.createElement("p");
+
+                    // Assign text-value to paragraph
+                    const warningContent = document.createTextNode(userWarnings[i]);
+                    warningParagraph.appendChild(warningContent);
+
+                    // Add paragraph to DOM
+                    outputDiv.appendChild(warningParagraph);
+                }
+            }
+        }
+
+        function resetQuiz() {
+            // Clear the test output
+            while(outputDiv.firstChild) {
+                outputDiv.removeChild(outputDiv.firstChild);
+            }
+
+            // Reset variables back to ground-level
+            questionCounter = 0;
+            receivedResponses = Array(questionsAndAnswers.length).fill("");
+            userWarnings = [];
+
+            // Show the introDiv
+            introDiv.classList.remove("hide");
+
+            // Hide the questionsDiv and resultsDiv
+            questionsDiv.classList.add("hide");
+            resultsDiv.classList.add("hide");
+        }
+
+        /*
+        * SECTION: RUN LOGIC
+        */
+        startBtn.addEventListener("click", function () {
+            startQuiz();
+        });
+        resetBtn.addEventListener("click", function () {
+            resetQuiz();
+        });
+
+        
+    </script>
+</body>
+</html>
